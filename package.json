@@ -1,6 +1,6 @@
 {
   "name": "require-reload",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Reload a require'd module/file. Useful for hot-reloading classes.",
   "main": "reload.js",
   "directories": {
