@@ -19,7 +19,7 @@ exports.timeReload = function(test) {
         test.ok(time.success);
         test.notEqual(time.time, oldTime);
         test.done();
-    }, 1);
+    }, 20);
 };
 
 exports.timeThrow = function(test) {
@@ -52,7 +52,7 @@ exports.nodeModuleReload = function(test) {
         test.ok(reloadTest.success);
         test.notEqual(reloadTest.time, oldTime);
         test.done();
-    }, 1);
+    }, 20);
 };
 
 exports.invalidPath = function(test) {
