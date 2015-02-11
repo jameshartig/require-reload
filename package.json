@@ -1,6 +1,6 @@
 {
   "name": "require-reload",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Reload a require'd module/file. Useful for hot-reloading classes.",
   "main": "reload.js",
   "directories": {
@@ -12,6 +12,8 @@
   "scripts": {
     "test": "nodeunit tests"
   },
+  "engines": {"node": ">=0.6.21"},
+  "engineStrict": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/fastest963/require-reload.git"
