@@ -16,6 +16,8 @@ try {
 }
 ```
 
+Keep in mind that the cache is shared between child modules and their parents. If you want to reload your depdencies when
+you're reloaded then you must also use `require-reload`. This is on purpose so things are not unintentionally reloaded.
 
 ## Advanced Usage ##
 
