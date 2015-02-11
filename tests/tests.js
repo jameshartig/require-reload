@@ -6,12 +6,6 @@ var reload = require('../reload.js'),
     context = require('./lib/getMyContext.js'),
     reloadInContext = reload(context);
 
-function clearCache() {
-    for (var id in require.cache) {
-        delete require.cache[id];
-    }
-}
-
 //must be first time test otherwise require might be tainted by the timeFile already
 exports.timeRequire = function(test) {
     test.strictEqual(require.cache[require.resolve(timeFile)], undefined);
@@ -22,6 +16,13 @@ exports.timeRequire = function(test) {
 
 exports.timeResolve = function(test) {
     test.equal(reload.resolve(timeFile), require.resolve(timeFile));
+    test.done();
+};
+
+exports.emptyCache = function(test) {
+    test.notStrictEqual(require.cache[require.resolve(timeFile)], undefined);
+    reload.emptyCache();
+    test.strictEqual(require.cache[require.resolve(timeFile)], undefined);
     test.done();
 };
 
@@ -92,7 +93,7 @@ exports.invalidPath = function(test) {
 
 exports.timeRequireContext = function(test) {
     //the parent and the child share the same cache unfortunately..., but that is why we have the nodeModuleContext test
-    clearCache();
+    reload.emptyCache();
     test.notStrictEqual(context, require);
     test.strictEqual(context.cache[context.resolve(timeFileInContext)], undefined);
     var time = reloadInContext(timeFileInContext);
@@ -100,8 +101,25 @@ exports.timeRequireContext = function(test) {
     test.done();
 };
 
+exports.invalidPathContext = function(test) {
+    function throws() {
+        reloadInContext(timeFile);
+    }
+    test.throws(throws, Error, "Cannot find module '" + timeFile + "'");
+    test.done();
+};
+
 exports.timeResolveContext = function(test) {
+    test.notStrictEqual(context, require);
     test.equal(reloadInContext.resolve(timeFileInContext), context.resolve(timeFileInContext));
+    test.done();
+};
+
+exports.emptyCacheContext = function(test) {
+    test.notStrictEqual(context, require);
+    test.notStrictEqual(context.cache[context.resolve(timeFileInContext)], undefined);
+    reloadInContext.emptyCache();
+    test.strictEqual(context.cache[context.resolve(timeFileInContext)], undefined);
     test.done();
 };
 

@@ -41,6 +41,11 @@ function reload(name, ctx) {
     if (typeof name === 'function' && typeof name.cache === 'object') {
         var func = reloadCtx.bind(null, name);
         func.resolve = name.resolve;
+        func.emptyCache = function() {
+            for (var id in name.cache) {
+                delete name.cache[id];
+            }
+        };
         return func;
     }
     if (ctx !== undefined) {
@@ -54,10 +59,19 @@ function reload(name, ctx) {
     return reloadParent(name);
 }
 
-module.exports = reload;
-reload.resolve = function(req) {
+reload.resolve = function(req, context) {
+    if (context !== undefined) {
+        return context.resolve(req);
+    }
     return parent.constructor._resolveFilename(req, parent);
 };
+reload.emptyCache = function(context) {
+    var cache = context ? context.cache : parent.constructor._cache;
+    for (var id in cache) {
+        delete cache[id];
+    }
+};
+module.exports = reload;
 
 //don't allow reload.js to be cached otherwise we can't use the hack with the parent filename
 delete require.cache[module.id];
