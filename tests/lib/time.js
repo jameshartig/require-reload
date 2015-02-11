@@ -1,3 +1,5 @@
+var reload = require('../../reload.js'),
+    nestedTime = reload('./nestedTime.js');
 
 if (root.modelFail) {
     throw new Error('Failing for test');
@@ -5,3 +7,6 @@ if (root.modelFail) {
 
 exports.success = true;
 exports.time = Date.now();
+exports.nestedTime = function() {
+    return nestedTime.time;
+};
